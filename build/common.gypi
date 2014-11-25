@@ -553,6 +553,9 @@
       # Enable XSLT support by deafult.
       'disable_xslt%': 0,
 
+      # Enable SVG support by deafult.
+      'disable_svg%': 1,
+
       # Use native android functions in place of ICU.  Not supported by most
       # components.
       'use_icu_alternatives_on_android%': 0,
@@ -1196,6 +1199,7 @@
     'disable_media_stream%': '<(disable_media_stream)',
     'disable_inspector%': '<(disable_inspector)',
     'disable_xslt%': '<(disable_xslt)',
+    'disable_svg%': '<(disable_svg)',
     'use_icu_alternatives_on_android%': '<(use_icu_alternatives_on_android)',
     'enable_task_manager%': '<(enable_task_manager)',
     'sas_dll_path%': '<(sas_dll_path)',
@@ -2946,6 +2950,9 @@
       }],
       ['disable_xslt==1', {
         'defines': ['DISABLE_XSLT=1'],
+      }],
+      ['disable_svg==1', {
+        'defines': ['DISABLE_SVG=1'],
       }],
       ['use_icu_alternatives_on_android==1', {
         'defines': ['USE_ICU_ALTERNATIVES_ON_ANDROID=1'],
