@@ -2425,6 +2425,7 @@ void RenderFrameImpl::didFinishLoad(blink::WebLocalFrame* frame) {
   if (is_swapped_out())
     return;
 
+  LOG(INFO) << "Halton: RenderFrameImpl::didFinishLoad";
   Send(new FrameHostMsg_DidFinishLoad(routing_id_,
                                       ds->request().url()));
 }

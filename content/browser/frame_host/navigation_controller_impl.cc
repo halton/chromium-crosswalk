@@ -758,6 +758,7 @@ bool NavigationControllerImpl::RendererDidNavigate(
     LoadCommittedDetails* details) {
   is_initial_navigation_ = false;
 
+  LOG(INFO) << "Halton:111";
   // Save the previous state before we clobber it.
   if (GetLastCommittedEntry()) {
     details->previous_url = GetLastCommittedEntry()->GetURL();

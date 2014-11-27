@@ -599,6 +599,7 @@ void WebURLLoaderImpl::Context::OnDownloadedData(int len,
 void WebURLLoaderImpl::Context::OnReceivedData(const char* data,
                                                int data_length,
                                                int encoded_data_length) {
+  LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
   if (!client_)
     return;
 
@@ -621,6 +622,7 @@ void WebURLLoaderImpl::Context::OnReceivedData(const char* data,
     scoped_refptr<Context> protect(this);
     multipart_delegate_->OnReceivedData(data, data_length, encoded_data_length);
   } else {
+    LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
     client_->didReceiveData(loader_, data, data_length, encoded_data_length);
   }
 }
@@ -661,12 +663,15 @@ void WebURLLoaderImpl::Context::OnCompletedRequest(
   DCHECK(!completed_bridge_.get());
   completed_bridge_.swap(bridge_);
 
+  LOG(INFO) << "Halton: ";
   if (client_) {
     if (error_code != net::OK) {
+  LOG(INFO) << "Halton: ";
       client_->didFail(loader_, CreateError(request_.url(),
                                             stale_copy_in_cache,
                                             error_code));
     } else {
+  LOG(INFO) << "Halton: ";
       client_->didFinishLoading(
           loader_, (completion_time - TimeTicks()).InSecondsF(),
           total_transfer_size);
@@ -717,7 +722,9 @@ void WebURLLoaderImpl::Context::HandleDataURL() {
 
   int error_code = GetInfoFromDataURL(request_.url(), &info, &data);
 
+  LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
   if (error_code == net::OK) {
+    LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
     OnReceivedResponse(info);
     if (!data.empty())
       OnReceivedData(data.data(), data.size(), 0);

@@ -349,6 +349,7 @@ void ResourceDispatcher::OnReceivedResponse(
   if (!request_info)
     return;
   request_info->response_start = ConsumeIOTimestamp();
+  LOG(INFO) << "Halton: " << __func__;
 
   if (delegate_) {
     RequestPeer* new_peer =
@@ -481,6 +482,7 @@ void ResourceDispatcher::OnReceivedData(int request_id,
   // Acknowledge the reception of this data.
   if (send_ack)
     message_sender_->Send(new ResourceHostMsg_DataReceived_ACK(request_id));
+  LOG(INFO) << "Halton: " << __func__;
 }
 
 void ResourceDispatcher::OnDownloadedData(int request_id,
@@ -551,6 +553,7 @@ void ResourceDispatcher::OnRequestComplete(
   RequestPeer* peer = request_info->peer;
 
   if (delegate_) {
+    LOG(INFO) << "Halton: " << __func__;
     RequestPeer* new_peer =
         delegate_->OnRequestComplete(
             request_info->peer, request_info->resource_type,
@@ -564,6 +567,7 @@ void ResourceDispatcher::OnRequestComplete(
   // The request ID will be removed from our pending list in the destructor.
   // Normally, dispatching this message causes the reference-counted request to
   // die immediately.
+  LOG(INFO) << "Halton: " << __func__;
   peer->OnCompletedRequest(request_complete_data.error_code,
                            request_complete_data.was_ignored_by_handler,
                            request_complete_data.exists_in_cache,
@@ -838,13 +842,28 @@ bool ResourceDispatcher::IsResourceDispatcherMessage(
     const IPC::Message& message) {
   switch (message.type()) {
     case ResourceMsg_UploadProgress::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
+      return true;
     case ResourceMsg_ReceivedResponse::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
+      return true;
     case ResourceMsg_ReceivedCachedMetadata::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
+      return true;
     case ResourceMsg_ReceivedRedirect::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
+      return true;
     case ResourceMsg_SetDataBuffer::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
+      return true;
     case ResourceMsg_DataReceived::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
+      return true;
     case ResourceMsg_DataDownloaded::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
+      return true;
     case ResourceMsg_RequestComplete::ID:
+      LOG(INFO) << "Halton: " << __func__ << " " << message.type();
       return true;
 
     default:

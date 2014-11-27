@@ -856,12 +856,14 @@ void ResourceDispatcherHostImpl::DidFinishLoading(ResourceLoader* loader) {
   }
 
   if (loader->request()->url().SchemeIsSecure()) {
+    LOG(INFO) << "Halton: " << __func__;
     RecordCertificateHistograms(loader->request()->ssl_info(),
                                 info->GetResourceType());
   }
 
-  if (delegate_)
+  if (delegate_) {
     delegate_->RequestComplete(loader->request());
+  }
 
   // Destroy the ResourceLoader.
   RemovePendingRequest(info->GetChildID(), info->GetRequestID());
@@ -990,6 +992,7 @@ void ResourceDispatcherHostImpl::UpdateRequestForTransfer(
   // ResourceHandlers should always get state related to the request from the
   // ResourceRequestInfo rather than caching it locally.  This lets us update
   // the info object when a transfer occurs.
+  LOG(INFO) << "Halton: " << __func__;
   info->UpdateForTransfer(child_id, route_id, request_data.origin_pid,
                           request_id, request_data.parent_render_frame_id,
                           filter_->GetWeakPtr());

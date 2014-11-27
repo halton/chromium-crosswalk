@@ -787,6 +787,7 @@ bool URLRequest::Read(IOBuffer* dest, int dest_size, int* bytes_read) {
 
   // If this is the first read, end the delegate call that may have started in
   // OnResponseStarted.
+  LOG(INFO) << "Halton: " << __func__;
   OnCallToDelegateComplete();
 
   // This handles a cancel that happens while paused.
@@ -809,8 +810,11 @@ bool URLRequest::Read(IOBuffer* dest, int dest_size, int* bytes_read) {
   bool rv = job_->Read(dest, dest_size, bytes_read);
   // If rv is false, the status cannot be success.
   DCHECK(rv || status_.status() != URLRequestStatus::SUCCESS);
-  if (rv && *bytes_read <= 0 && status_.is_success())
+  if (rv && *bytes_read <= 0 && status_.is_success()) {
+  LOG(INFO) << "Halton: " << __func__;
     NotifyRequestCompleted();
+  }
+  LOG(INFO) << "Halton: " << __func__;
   return rv;
 }
 
@@ -880,6 +884,7 @@ void URLRequest::NotifyResponseStarted() {
         NotifyRequestCompleted();
 
       OnCallToDelegate();
+      LOG(INFO) << "Halton: " << __func__;
       delegate_->OnResponseStarted(this);
       // Nothing may appear below this line as OnResponseStarted may delete
       // |this|.
@@ -1200,8 +1205,10 @@ void URLRequest::NotifyRequestCompleted() {
   is_pending_ = false;
   is_redirecting_ = false;
   has_notified_completion_ = true;
-  if (network_delegate_)
+  if (network_delegate_) {
+  LOG(INFO) << "Halton: " << __func__;
     network_delegate_->NotifyCompleted(this, job_.get() != NULL);
+  }
 }
 
 void URLRequest::OnCallToDelegate() {

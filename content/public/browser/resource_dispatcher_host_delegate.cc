@@ -5,6 +5,7 @@
 #include "content/public/browser/resource_dispatcher_host_delegate.h"
 
 #include "content/public/browser/stream_handle.h"
+#include "base/logging.h"
 
 namespace content {
 
@@ -83,6 +84,7 @@ void ResourceDispatcherHostDelegate::OnRequestRedirected(
 
 void ResourceDispatcherHostDelegate::RequestComplete(
     net::URLRequest* url_request) {
+  LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
 }
 
 ResourceDispatcherHostDelegate::ResourceDispatcherHostDelegate() {

@@ -354,12 +354,14 @@ void ResourceLoader::OnResponseStarted(net::URLRequest* unused) {
 }
 
 void ResourceLoader::OnReadCompleted(net::URLRequest* unused, int bytes_read) {
+  LOG(INFO) << "Halton: " << __func__;
   DCHECK_EQ(request_.get(), unused);
   VLOG(1) << "OnReadCompleted: \"" << request_->url().spec() << "\""
           << " bytes_read = " << bytes_read;
 
   // bytes_read == -1 always implies an error.
   if (bytes_read == -1 || !request_->status().is_success()) {
+    LOG(INFO) << "Halton: " << __func__ << " " << bytes_read;
     ResponseCompleted();
     return;
   }
@@ -376,10 +378,12 @@ void ResourceLoader::OnReadCompleted(net::URLRequest* unused, int bytes_read) {
   if (is_deferred() || !request_->status().is_success())
     return;
 
+  LOG(INFO) << "Halton: " << __func__ << " " << bytes_read;
   if (bytes_read > 0) {
     StartReading(true);  // Read the next chunk.
   } else {
     // URLRequest reported an EOF. Call ResponseCompleted.
+    LOG(INFO) << "Halton: " << __func__ << " " << bytes_read;
     DCHECK_EQ(0, bytes_read);
     ResponseCompleted();
   }
@@ -575,10 +579,12 @@ void ResourceLoader::StartReading(bool is_continuation) {
     return;
 
   if (!is_continuation || bytes_read <= 0) {
+    LOG(INFO) << "Halton: " << __func__ << " " << bytes_read;
     OnReadCompleted(request_.get(), bytes_read);
   } else {
     // Else, trigger OnReadCompleted asynchronously to avoid starving the IO
     // thread in case the URLRequest can provide data synchronously.
+    LOG(INFO) << "Halton: " << __func__;
     base::MessageLoop::current()->PostTask(
         FROM_HERE,
         base::Bind(&ResourceLoader::OnReadCompleted,
@@ -604,6 +610,7 @@ void ResourceLoader::ResumeReading() {
 }
 
 void ResourceLoader::ReadMore(int* bytes_read) {
+  LOG(INFO) << "Halton: " << __func__;
   DCHECK(!is_deferred());
 
   // Make sure we track the buffer in at least one place.  This ensures it gets
@@ -611,7 +618,9 @@ void ResourceLoader::ReadMore(int* bytes_read) {
   // doesn't use the buffer.
   scoped_refptr<net::IOBuffer> buf;
   int buf_size;
+  LOG(INFO) << "Halton: " << __func__;
   if (!handler_->OnWillRead(&buf, &buf_size, -1)) {
+    LOG(INFO) << "Halton: " << __func__ << buf_size;
     Cancel();
     return;
   }
@@ -619,7 +628,9 @@ void ResourceLoader::ReadMore(int* bytes_read) {
   DCHECK(buf.get());
   DCHECK(buf_size > 0);
 
+  LOG(INFO) << "Halton: " << __func__;
   request_->Read(buf.get(), buf_size, bytes_read);
+  LOG(INFO) << "Halton: " << __func__;
 
   // No need to check the return value here as we'll detect errors by
   // inspecting the URLRequest's status.
@@ -630,6 +641,7 @@ void ResourceLoader::CompleteRead(int bytes_read) {
   DCHECK(request_->status().is_success());
 
   bool defer = false;
+  LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
   if (!handler_->OnReadCompleted(bytes_read, &defer)) {
     Cancel();
   } else if (defer) {

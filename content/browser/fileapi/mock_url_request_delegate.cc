@@ -22,6 +22,7 @@ MockURLRequestDelegate::~MockURLRequestDelegate() {
 }
 
 void MockURLRequestDelegate::OnResponseStarted(net::URLRequest* request) {
+  LOG(INFO) << "Halton: " << __func__ << __LINE__;
   if (request->status().is_success()) {
     EXPECT_TRUE(request->response_headers());
     ReadSome(request);
@@ -56,6 +57,7 @@ void MockURLRequestDelegate::ReadSome(net::URLRequest* request) {
 
 void MockURLRequestDelegate::ReceiveData(net::URLRequest* request,
                                          int bytes_read) {
+  LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
   if (bytes_read) {
     response_data_.append(io_buffer_->data(),
                           static_cast<size_t>(bytes_read));
@@ -66,6 +68,7 @@ void MockURLRequestDelegate::ReceiveData(net::URLRequest* request,
 }
 
 void MockURLRequestDelegate::RequestComplete() {
+  LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
   base::MessageLoop::current()->Quit();
 }
 

@@ -125,6 +125,7 @@ void ResourceFetcherImpl::OnLoadComplete() {
   // Take a reference to the callback as running the callback may lead to our
   // destruction.
   Callback callback = callback_;
+  LOG(INFO) << "Halton: ";
   callback.Run(status() == LOAD_FAILED ? blink::WebURLResponse() : response(),
                status() == LOAD_FAILED ? std::string() : data());
 }

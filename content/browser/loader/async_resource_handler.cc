@@ -294,6 +294,7 @@ bool AsyncResourceHandler::OnReadCompleted(int bytes_read, bool* defer) {
   int encoded_data_length = current_transfer_size - reported_transfer_size_;
   reported_transfer_size_ = current_transfer_size;
 
+  LOG(INFO) << "Halton: " << __func__ << " " << __LINE__;
   filter->Send(new ResourceMsg_DataReceived(
       GetRequestID(), data_offset, bytes_read, encoded_data_length));
   ++pending_data_count_;
@@ -375,6 +376,7 @@ void AsyncResourceHandler::OnResponseCompleted(
       request()->GetTotalReceivedBytes();
   info->filter()->Send(
       new ResourceMsg_RequestComplete(GetRequestID(), request_complete_data));
+  LOG(INFO) << "Halton: " << GetRequestID();
 }
 
 bool AsyncResourceHandler::EnsureResourceBufferIsInitialized() {

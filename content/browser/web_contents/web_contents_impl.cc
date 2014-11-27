@@ -2759,6 +2759,7 @@ void WebContentsImpl::OnDidFinishLoad(
 
   RenderFrameHostImpl* rfh =
       static_cast<RenderFrameHostImpl*>(render_frame_message_source_);
+  LOG(INFO) << "Halton: DidFinishLoading";
   FOR_EACH_OBSERVER(
       WebContentsObserver, observers_, DidFinishLoad(rfh, validated_url));
 }
@@ -2781,6 +2782,7 @@ void WebContentsImpl::OnDidStartLoading(bool to_different_document) {
   //   should no longer be a start/stop call imbalance. TODO(avi): When this
   //   future arrives, update this code to not allow this case.
   DCHECK_GE(loading_frames_in_progress_, 0);
+  LOG(INFO) << "Halton: DidStartLoading";
   if (loading_progresses_.find(render_frame_id) == loading_progresses_.end()) {
     if (loading_frames_in_progress_ == 0)
       DidStartLoading(rfh, to_different_document);
@@ -2811,6 +2813,7 @@ void WebContentsImpl::OnDidStopLoading() {
   if (loading_frames_in_progress_ == 0)
     return;
   --loading_frames_in_progress_;
+  LOG(INFO) << "Halton: DidStartLoading: " << loading_frames_in_progress_;
   if (loading_frames_in_progress_ == 0)
     DidStopLoading(rfh);
 }
