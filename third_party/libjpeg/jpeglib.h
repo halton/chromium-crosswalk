@@ -13,9 +13,11 @@
 #ifndef JPEGLIB_H
 #define JPEGLIB_H
 
+#ifndef USE_SYSTEM_LIBJPEG
 /* Begin chromium edits */
 #include "jpeglibmangler.h"
 /* End chromium edits */
+#endif
 
 /*
  * First we include the configuration files that record how this

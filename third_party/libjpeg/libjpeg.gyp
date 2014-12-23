@@ -95,9 +95,28 @@
                   '/usr/local/include',
                 ],
               }],
+              ['OS=="android"', {
+                # FIXME(halton): Remove this condition after jpeg headers are added in official ndk.
+                'include_dirs': [
+                  '.',
+                ],
+              }],
             ],
           },
           'link_settings': {
+            # FIXME(halton): Remove this condition after libjpeg.so is added in official ndk
+            'conditions': [
+              ['OS=="android" and target_arch=="arm"', {
+                'ldflags': [
+                  '-L<(DEPTH)/third_party/android_ndk_extra/armeabi-v7a/lib',
+                ],
+              }],
+              ['OS=="android" and target_arch=="ia32"', {
+                'ldflags': [
+                  '-L<(DEPTH)/third_party/android_ndk_extra/x86/lib',
+                ],
+              }],
+            ],
             'libraries': [
               '-ljpeg',
             ],
